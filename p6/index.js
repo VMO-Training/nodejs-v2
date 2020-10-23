@@ -1,3 +1,10 @@
+//khai bao  model
+const BlogPost = require('./models/BlogPost.js')
+
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/my_database', { useNewUrlParser: true })
+
+
 //khai bao express
 //khai bao app trong express
 //khai bao path
@@ -26,9 +33,20 @@ app.listen(4000, () =>
 
 
 //Tao router xu ly EJs
+// app.get('/',(req,res) =>{
+//     res.render('index')
+// })
+//Sua lai 
 app.get('/',(req,res) =>{
-    res.render('index')
+    BlogPost.find({}, function(error, post){
+            console.log(post);
+            res.render('index',{
+                blogpost: post
+            })
+    })
 })
+
+
 
 app.get('/about',(req,res)=> {
     res.render('about')
@@ -37,15 +55,30 @@ app.get('/about',(req,res)=> {
 app.get('/contact',(req,res)=>{
     res.render('contact')
 })
-app.get('/post',(req,res)=>{
-    res.render('post')
-})
+
+
 //Dang ky router(tao post moi)
 app.get('/post/new', (req,res) => {
     res.render('create')
-})
+})                                                                                                      
 
 app.post('/post/store',(req,res) =>{
-        console.log(req.body)
-    res.redirect('/')
-})
+    //Tao mo hinh tai lieu moi voi trinh duyet
+    // model creates a new dos with browser data
+    BlogPost.create(req.body, (error,blogpost) =>{
+        res.redirect('/')
+    })
+    })
+
+//     app.get('/post',(req,res)=>{
+//     res.render('post')
+// })
+
+//Sua file
+    app.get('/post/:id',(req, res) => {
+        BlogPost.findById(req.params.id, function(error,detailpost){
+            res.render('post',{
+                detailpost
+            })
+        })
+    })
