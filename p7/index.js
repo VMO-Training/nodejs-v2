@@ -13,7 +13,7 @@ const app = new express()
 const path = require('path')
 
 //khaibao fileupload
-const fileupload = require('express-fileupload')
+const fileUpload = require('express-fileupload')
 app.use(fileUpload())
 
 //khai bao ejs
@@ -22,7 +22,6 @@ app.set('view engine', 'ejs')
 
 //khai bao body-parser
 const bodyParser = require('body-parser');
-const fileUpload = require('express-fileupload');
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended:true}))
 
@@ -67,21 +66,10 @@ app.get('/post/new', (req,res) => {
     res.render('create')
 })              
 
-app.post('/posts/new', (req, res) => {
-    let image = req.files.image;
-    image.mv(path.resolve(__dirname, 'public/upload', image.name), function (err) {
-    // model creates a new doc with browser data
-    BlogPost.create(req.body, (error, blogpost) => {
-    res.redirect('/')
-    })
-    })
-   })
-   
 
 //     app.get('/post',(req,res)=>{
 //     res.render('post')
 // })
-
 //Sua file
     app.get('/post/:id',(req, res) => {
         BlogPost.findById(req.params.id, function(error,detailpost){
@@ -90,3 +78,14 @@ app.post('/posts/new', (req, res) => {
             })
         })
     })
+
+//upload image
+app.post('/post/store', (req, res) => {
+    let image = req.files.image;
+    image.mv(path.resolve(__dirname, 'public/upload', image.name), function (error) {
+    // model creates a new doc with browser data
+    BlogPost.create({...req.body,image: '/upload/' + image.name},function(error) {
+    res.redirect('/')
+             })
+         })
+   })

@@ -8,7 +8,10 @@ const BlogPostSchema = new Schema({
     dateposted: {
             type: Date,
             default: new  Date()
-    }
+            
+    },
+    image: String
+    
 })
 const BlogPost = mongoose.model('BlogPost', BlogPostSchema)
 module.exports = BlogPost
