@@ -25,6 +25,7 @@ const storeuser = require('./controllers/storeUser')
 const loginnew = require('./controllers/login')
 const loginuser = require('./controllers/loginuser')
 const logout = require('./controllers/logout')
+
 //khaibao fileupload
 const fileUpload = require('express-fileupload')
 app.use(fileUpload())
@@ -54,10 +55,15 @@ const validateMiddleWare = require('./midllerware/validatemiddlerware');
 app.use('/post/store', validateMiddleWare)
 
 //Khoi tao sever
-app.listen(4000, () =>
-{
-    console.log('App listening on a port 4000')
-})
+// app.listen(4000, () =>
+// {
+//     console.log('App listening on a port 4000')
+// })
+
+    app.listen(process.env.PORT, function(){
+        
+    })
+
 
 app.use(expressSession({
     secret: 'keyboard cat'
@@ -90,3 +96,4 @@ app.get('/auth/logout',logout)
 app.use((req,res) => 
         res.render('404')   
 )
+
